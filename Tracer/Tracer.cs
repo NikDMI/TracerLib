@@ -65,14 +65,21 @@ namespace TracerLib
                 currentThreadInfo.AddDelayTicks(_stopwatch.ElapsedTicks - startTickCount);
             }
         }
-
-
-        /*
-        public TraceResult GetTraceResult()
+    
+        public ITraceResult GetTraceResult()
         {
-
+            lock (_lockObject)
+            {
+                var traceResult = new TraceResult();
+                long ticksPerMillisecond = Stopwatch.Frequency / 1000;
+                foreach(var pairThreadInfo in _tracedMethods)
+                {
+                    traceResult.WriteNewThread(pairThreadInfo.Value, ticksPerMillisecond, pairThreadInfo.Key.Name);
+                }
+                return traceResult;
+            }
         }
-        */
+        
 
     }
 }

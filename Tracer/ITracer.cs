@@ -2,10 +2,11 @@
 
 namespace TracerLib
 {
+    //Interface for tracer objects
     public interface ITracer
     {
         void StartTrace();
         void StopTrace();
-        //TraceResult GetTraceResult();
+        ITraceResult GetTraceResult();
     }
 }

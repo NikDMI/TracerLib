@@ -17,6 +17,7 @@ namespace TracerLib
             private long _startTickCount;
             private long _startThreadDelayTickCount;
             private long _totalWorkingTickTime = 0;
+            private long _totalWorkingMsTime = 0;
 
             public MethodInfo(ThreadInfo workingThread, MethodBase tracedMethodBase, long startTickCount)
             {
@@ -40,6 +41,18 @@ namespace TracerLib
                 long delayTickCount = endDelayTickCount - _startThreadDelayTickCount;
                 _totalWorkingTickTime = (endTickCount - _startTickCount) - delayTickCount;
                 return _parentMethod;
+            }
+
+            public static MethodInfo CreateDeepCopy(MethodInfo methodInfo, long ticksPerMillisecond)
+            {
+                MethodInfo copyInfo = (MethodInfo) methodInfo.MemberwiseClone();
+                copyInfo._nestedMethods = new List<MethodInfo>();
+                copyInfo._totalWorkingMsTime = copyInfo._totalWorkingTickTime / ticksPerMillisecond;
+                for (int i = 0; i < methodInfo._nestedMethods.Count; i++)
+                {
+                    copyInfo._nestedMethods.Add(MethodInfo.CreateDeepCopy(methodInfo._nestedMethods[i], ticksPerMillisecond));
+                }
+                return copyInfo;
             }
 
         }

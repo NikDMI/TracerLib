@@ -24,6 +24,7 @@ namespace TracerLib
             _lastTracedMethod = tracedMethod;
         }
 
+        //Stop method tracing
         public void StopCurrentMethod(MethodBase tracedMethodBase, long endTickCount)
         {
             if(_rootMethod != _lastTracedMethod)
@@ -32,6 +33,7 @@ namespace TracerLib
                 throw new Exception("There is no methods to be stopped");
         }
 
+        //Add delay to get more accurate time values
         public void AddDelayTicks(long delayTicks)
         {
             _totalMeasuringTicksDelay += delayTicks;
@@ -41,6 +43,14 @@ namespace TracerLib
         {
             get { return _totalMeasuringTicksDelay; }
         }
+
+        //Get reference to the ROOT of traced methods
+        public MethodInfo GetResult(long ticksPerMilliseconds)
+        {
+            if (_rootMethod != _lastTracedMethod)
+                throw new Exception("Can't get thread result, while measurinig is going");
+            return MethodInfo.CreateDeepCopy(_rootMethod, ticksPerMilliseconds);
+        } 
 
     }
 }
