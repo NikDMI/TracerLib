@@ -8,17 +8,20 @@ namespace TracerLib
 	internal class TraceResult: ITraceResult
 	{
 		private int _defaultThreadID = 1;
+		//Thread names and corresponding ROOT method elements
 		private List<KeyValuePair<string, ThreadInfo.MethodInfo>> _tracedThreads;
-		internal TraceResult()
+		public TraceResult()
         {
 			_tracedThreads = new List<KeyValuePair<string, ThreadInfo.MethodInfo>>();
 		}
 
 		//Write information about methods in the corresponding thread
-		internal void WriteNewThread(ThreadInfo threadInfo, long TicksPerMillisecond, string threadName = null)
+		public void WriteNewThread(ThreadInfo threadInfo, long TicksPerMillisecond, string threadName = null)
         {
 			if (threadName == null) threadName = (_defaultThreadID++).ToString();
 			_tracedThreads.Add(new KeyValuePair<string, ThreadInfo.MethodInfo>(threadName, threadInfo.GetResult(TicksPerMillisecond)));
         }
+
+		public List<KeyValuePair<string, ThreadInfo.MethodInfo>> tracedThreads { get { return _tracedThreads; } }
 	}
 }
