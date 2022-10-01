@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
 
 namespace TracerLib.Serialization
 {
     public sealed partial class JSONSerializator: ISerializator
     {
-        public string Serialize(ITraceResult traceResult_)
+        string ISerializator.Serialize(ITraceResult traceResult_)
         {
             TraceResult traceResult = traceResult_ as TraceResult;
             if (traceResult == null) throw new ArgumentException("JSONSerializer: ITraceResult has incompatible type");
-            return "";
+            SerializationData serializationData = new SerializationData();
+            serializationData.SetData(traceResult);
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            return JsonSerializer.Serialize(serializationData, options);
         }
 
-        public ITraceResult Deserialize(string data)
+         ITraceResult ISerializator.Deserialize(string data)
         {
             return new TraceResult();
         }

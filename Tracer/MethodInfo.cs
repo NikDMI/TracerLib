@@ -55,6 +55,10 @@ namespace TracerLib
                 return copyInfo;
             }
 
+            public List<MethodInfo> NestedMethods { get { return _nestedMethods; } }
+            public MethodBase MethodBase { get { return _methodBase; } }
+            public long MethodTimeMs { get { return _totalWorkingMsTime; } }
+
         }
     }
 }

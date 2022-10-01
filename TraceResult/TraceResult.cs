@@ -21,7 +21,11 @@ namespace TracerLib
 			if (threadName == null) threadName = (_defaultThreadID++).ToString();
 			_tracedThreads.Add(new KeyValuePair<string, ThreadInfo.MethodInfo>(threadName, threadInfo.GetResult(TicksPerMillisecond)));
         }
-
 		public List<KeyValuePair<string, ThreadInfo.MethodInfo>> tracedThreads { get { return _tracedThreads; } }
+
+		public string SerializeResult(Serialization.ISerializator serializator)
+        {
+			return serializator.Serialize(this);
+        }
 	}
 }

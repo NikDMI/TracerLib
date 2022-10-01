@@ -5,10 +5,10 @@ using System.Text;
 namespace TracerLib.Serialization
 {
     //Common interface for users to work with different serializable notations
-    interface ISerializator
+    public interface ISerializator
     {
-        string Serialize(ITraceResult traceResult);
-        ITraceResult Deserialize(string data);
+        internal string Serialize(ITraceResult traceResult);
+        internal ITraceResult Deserialize(string data);
     }
 
 }
