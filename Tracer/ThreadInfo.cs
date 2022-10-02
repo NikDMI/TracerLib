@@ -16,6 +16,12 @@ namespace TracerLib
             _lastTracedMethod = _rootMethod;
         }
 
+        public ThreadInfo(MethodInfo rootMethod)
+        {
+            _rootMethod = rootMethod;
+            _lastTracedMethod = _rootMethod;
+        }
+
         //Add new method to be traced
         public void AddMethod(MethodBase tracedMethodBase, long startTickCount)
         {

@@ -8,7 +8,6 @@ namespace TracerLib.Serialization
     public interface ISerializator
     {
         internal string Serialize(ITraceResult traceResult);
-        internal ITraceResult Deserialize(string data);
     }
 
 }

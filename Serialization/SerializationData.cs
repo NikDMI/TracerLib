@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using System.Reflection;
+using System.Xml.Serialization;
 
 namespace TracerLib.Serialization
 {
-
-    internal class SerializationData
+    //This class is used throught serialized method of .Net FCL
+    [XmlRoot("root")]
+    public sealed class SerializationData
     {
+        [XmlElement(ElementName = "thread")]
         public List<ThreadSerializeData> threads { get; set; }
 
         //Create internal structure for serialize methods
-        public void SetData(TraceResult data)
+        internal SerializationData(TraceResult data)
         {
             List<KeyValuePair<string, ThreadInfo.MethodInfo>> tracedThreads = data.tracedThreads;
             threads = new List<ThreadSerializeData>();
@@ -22,15 +23,14 @@ namespace TracerLib.Serialization
                 threads.Add(threadData);
             }
         }
-
-        public void GetData(ref TraceResult data)
+        private SerializationData()
         {
 
         }
 
         public class ThreadSerializeData
         {
-            public ThreadSerializeData(KeyValuePair<string, ThreadInfo.MethodInfo> threadInfo)
+            internal ThreadSerializeData(KeyValuePair<string, ThreadInfo.MethodInfo> threadInfo)
             {
                 long totalMethodsTime = 0;
                 id = threadInfo.Key;
@@ -43,17 +43,25 @@ namespace TracerLib.Serialization
                 }
                 time = totalMethodsTime+" ms";
             }
+            public ThreadSerializeData()
+            {
 
+            }
+
+            [XmlAttribute]
             public string id { set; get; }
+
+            [XmlAttribute]
             public string time { set; get; }
+
+            [XmlElement(ElementName = "method")]
+
             public List<MethodSerializeData> methods { get; set; }
         }
 
-
-
         public class MethodSerializeData
         {
-            public MethodSerializeData(ThreadInfo.MethodInfo methodInfo)
+            internal MethodSerializeData(ThreadInfo.MethodInfo methodInfo)
             {
                 MethodBase methodBase = methodInfo.MethodBase;
                 name = methodBase.Name;
@@ -65,12 +73,22 @@ namespace TracerLib.Serialization
                     methods.Add(new MethodSerializeData(innerMethod));
                 }
             }
+            public MethodSerializeData()
+            {
+
+            }
+
+            [XmlAttribute]
             public string name { get; set; }
 
+            [XmlAttribute("class")]
             [JsonPropertyName("class")]
             public string className { get; set; }
+
+            [XmlAttribute]
             public string time { get; set; }
 
+            [XmlElement(ElementName = "method")]
             public List<MethodSerializeData> methods { get; set; }
         }
     }
