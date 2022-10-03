@@ -18,5 +18,10 @@ namespace TracerLib.Writer
             fileStream.Write(utf8Data, 0, utf8Data.Length);
             fileStream.Flush();
         }
+
+        ~FileWriter()
+        {
+            if (fileStream != null) fileStream.Close();
+        }
     }
 }
